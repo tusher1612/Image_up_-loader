@@ -3,15 +3,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useDropzone } from "react-dropzone";
 import axios from "axios";
+import "./styles/FileUploader.module.css";
+import { FileWithProgress } from "@/types/types";
 
-type FileWithProgress = {
-  file: File;
-  progress: number;
-  uploaded: boolean;
-  uploading: boolean;
-  canceled: boolean;
-  cancelTokenSource: any | null;
-};
 
 const FileUploader = () => {
   const [uploadQueue, setUploadQueue] = useState<FileWithProgress[]>([]);
@@ -179,18 +173,12 @@ const FileUploader = () => {
   return (
     <div style={{ padding: "20px" }}>
       <h1>File Uploader</h1>
-      <div
+      <div className="dashed-container"
         {...getRootProps()}
-        style={{
-          border: "2px dashed #ccc",
-          padding: "20px",
-          textAlign: "center",
-          cursor: "pointer",
-          height: "60vh",
-        }}
+       
       >
         <input {...getInputProps()} accept=".jpg, .png" />
-        <p style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%" }}>
+        <p className="uploadertext">
           Drag & drop files here, or click to select files
         </p>
       </div>
@@ -200,29 +188,19 @@ const FileUploader = () => {
           <div
             key={index}
             style={{
-              display: "flex",
-              alignItems: "center",
-              marginBottom: "10px",
-              border: "1px solid #ddd",
-              padding: "10px",
-              borderRadius: "5px",
               backgroundColor: file.canceled ? "#f8d7da" : "#fff",
               textDecoration: file.canceled ? "line-through" : "none",
               filter: file.canceled ? "blur(2px)" : "none", // Blur effect for canceled files
             }}
+            className="upload-card"
           >
-            <div style={{ flex: 1, marginRight: "10px", color: "grey" }}>
+            <div className="upload-name">
               <strong>{file.file.name}</strong>
             </div>
 
             <div style={{ width: "30%" }}>
               <div
-                style={{
-                  height: "10px",
-                  background: "#eee",
-                  borderRadius: "5px",
-                  overflow: "hidden",
-                }}
+               className="uploaded-section"
               >
                 <div
                   style={{
@@ -241,23 +219,16 @@ const FileUploader = () => {
             {file.uploading && !file.uploaded && !file.canceled && (
   <button
     onClick={() => cancelUpload(index)}
-    style={{
-      marginLeft: "10px",
-      color: "red",
-      background: "none",
-      border: "none",
-      cursor: "pointer",
-      fontSize: "16px",
-    }}
+className="cancel-upload"
   >
     ✖
   </button>
 )}
 {file.uploaded &&  (
-  <div style={{ marginLeft: "10px", color: "green" }}>✔</div>
+  <div className="success">✔</div>
 )}
 {file.canceled && !file.uploaded && (
-  <div style={{ marginLeft: "10px", color: "red", fontWeight: "bold" }}>x</div>
+  <div className="cancel">x</div>
 )}
 
           </div>
